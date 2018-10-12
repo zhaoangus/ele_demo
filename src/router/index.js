@@ -4,6 +4,7 @@ import Header from '@/components/header/Header'
 import Goods from '@/components/goods/Goods'
 import Ratings from '@/components/ratings/Ratings'
 import Seller from '@/components/seller/Seller'
+import '../common/stylus/index.styl'
 
 Vue.use(Router)
 

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="header">header</div>
-    <div class="tab">
+    <div class="tab border-1px">
       <div class="tab-item">
         <router-link class="tab-link" to="/goods">商品</router-link>
       </div>
@@ -23,12 +23,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  @import "./common/stylus/mixin.styl"
   #app
     .tab
       display: flex
       width: 100%
       height: 40px
       line-height: 40px
+      // border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+      border-1px(rgba(7, 17, 27, 0.1))
       .tab-item
         flex: 1
         text-align: center
