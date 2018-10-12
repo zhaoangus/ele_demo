@@ -2,9 +2,15 @@
   <div id="app">
     <div class="header">header</div>
     <div class="tab">
-      <div class="tab-item">商品</div>
-      <div class="tab-item">评论</div>
-      <div class="tab-item">商家</div>
+      <div class="tab-item">
+        <router-link class="tab-link" to="/goods">商品</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link class="tab-link" to="/ratings">评论</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link class="tab-link" to="/seller">商家</router-link>
+      </div>
     </div>
     <router-view/>
   </div>
@@ -26,4 +32,11 @@ export default {
       .tab-item
         flex: 1
         text-align: center
+        .tab-link
+          display: block
+          text-decoration: none
+          font-size: 14px
+          color: rgb(77, 85, 93)
+        .router-link-active
+          color: rgb(240, 20, 20)
 </style>
