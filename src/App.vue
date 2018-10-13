@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="header">header</div>
+    <Header :seller="seller"></Header>
     <div class="tab border-1px">
       <div class="tab-item">
         <router-link class="tab-link" to="/goods">商品</router-link>
@@ -17,8 +17,27 @@
 </template>
 
 <script>
+import axios from 'axios'
+import Header from './components/header/Header'
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      seller: Object
+    }
+  },
+  components: {
+    Header
+  },
+  created () {
+    axios.get('../static/data.json')
+      .then((res) => {
+        if (res) {
+          this.seller = res.data.seller
+          // console.log(this.seller)
+        }
+      })
+  }
 }
 </script>
 
