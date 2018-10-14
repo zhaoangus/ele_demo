@@ -6,14 +6,14 @@
       </div>
       <div class="content">
         <div class="title">
-          <span class="brand">品牌</span>
+          <span class="brand"></span>
           <span class="name">{{seller.name}}</span>
         </div>
         <div class="desc">
           {{seller.description}}/{{seller.deliveryTime}}分钟送达
         </div>
         <div v-if="seller.supports" class="support">
-          <span class="icon">减</span>
+          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
@@ -23,8 +23,7 @@
       </div>
     </div>
     <div class="bulletin-wrapper" @click="showDetail">
-      <span class="bulletin-title">公告</span>
-      <span class="bulletin-text">{{seller.bulletin}}</span>
+      <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <span class="icon">></span>
     </div>
     <div class="background">
@@ -59,8 +58,8 @@ export default {
       this.detailShow = true
     }
   },
-  mounted () {
-    console.log(this.seller.name)
+  created () {
+    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
   }
 }
 </script>
@@ -79,25 +78,30 @@ export default {
       vertical-align: top
       .avatar
         display: inline-block
+        vertical-align: top
         img
           border-radius: 2px
       .content
         display: inline-block
-        font-size: 14px
         margin-left: 16px
         .title
           margin: 2px 0 8px 0
           .brand
             display: inline-block
+            vertical-align: top
             width: 30px
             height: 18px
-            line-height: 18px
-            background: red
-            text-align: center
+            bg-image('brand')
+            background-size: 30px 18px
+            background-repeat: no-repeat
+            // line-height: 18px
+            // background: red
+            // text-align: center
           .name
-            margin-left: 4px
+            margin-left: 6px
             font-size: 16px
             line-height: 18px
+            font-weight: bold
         .desc
           margin-bottom: 10px
           line-height: 12px
@@ -106,20 +110,32 @@ export default {
           vertical-align: top
           .icon
             display: inline-block
+            vertical-align: top
             width: 12px
             height: 12px
-            line-height: 12px
             margin-right: 4px
-            padding: 2px
-            background: green
-            text-align: center
+            background-size: 12px
+            background-repeat: no-repeat
+            &.decrease
+              bg-image('decrease_1')
+            &.discount
+              bg-image('discount_1')
+            &.guarantee
+              bg-image('guarantee_1')
+            &.invoice
+              bg-image('invoice_1')
+            &.special
+              bg-image('special_1')
+            // padding: 2px
+            // background: green
+            // text-align: center
           .text
             line-height: 12px
             font-size: 10px
       .support-count
         position: absolute
-        right: 12px
-        bottom: 14px
+        right: 10px
+        bottom: 18px
         padding: 0 8px
         height: 24px
         line-height: 24px
@@ -142,25 +158,34 @@ export default {
       padding: 0 22px 0 12px
       white-space: nowrap
       overflow: hidden
+      // font-size: 0
       text-overflow: ellipsis
       background: rgba(7, 17, 27, 0.2)
       .bulletin-title
         display: inline-block
-        height: 15px
-        line-height: 15px
-        padding: 0
-        background: #ffffff
-        color: #000
-        font-size: 10px
-        font-weight: 500
-        border-radius: 2px
+        vertical-align: top
+        margin-top: 7px
+        width: 22px
+        height: 12px
+        bg-image('bulletin')
+        background-size: 22px 12px
+        background-repeat: no-repeat
+        // height: 15px
+        // line-height: 15px
+        // padding: 0
+        // background: #ffffff
+        // color: #000
+        // font-size: 10px
+        // font-weight: 500
+        // border-radius: 2px
       .bulletin-text
-        margin: 0 6px
+        vertical-align: top
+        margin: 0 4px
         font-size: 10px
       .icon
         position: absolute
         font-size: 10px
-        right: 12px
+        right: 20px
         top: 2px
     .background
       position: absolute
