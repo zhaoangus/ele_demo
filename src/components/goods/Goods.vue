@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuwrapper">
       <ul>
         <li v-for="item in goods" :key="item.index"
         class="menu-item">
@@ -11,7 +11,7 @@
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodswrapper">
       <ul>
         <li v-for="item in goods"
         :key="item.index" class="food-list">
@@ -26,12 +26,10 @@
                 <h2 class="name">{{food.name}}</h2>
                 <p class="desc">{{food.description}}</p>
                 <div class="extra">
-                  <span class="count">月售{{food.sellCount}}份</span>
-                  <span>好评率{{food.rating}}%</span>
+                  <span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
-                  <span class="now">¥{{food.price}}</span>
-                  <span class="old" v-show="food.oldPrice">{{food.oldPrice}}</span>
+                  <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
               </div>
             </li>
@@ -44,6 +42,7 @@
 
 <script>
 import axios from 'axios'
+import BScroll from 'better-scroll'
 export default {
   name: 'Goods',
   props: {
@@ -55,12 +54,19 @@ export default {
       classMap: Array
     }
   },
+  methods: {
+    _initScroll () {
+      this.menuScroll = new BScroll(this.$refs.menuwrapper, {})
+      this.foodScroll = new BScroll(this.$refs.foodswrapper, {})
+    }
+  },
   created () {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     axios.get('../../../static/data.json')
       .then((res) => {
         if (res) {
           this.goods = res.data.goods
+          this._initScroll()
         }
       })
   }
@@ -144,9 +150,10 @@ export default {
             font-size: 10px
             color: rgb(147, 153, 159)
           .desc
+            line-height: 12px
             margin-bottom: 8px
           .extra
-            &.count
+            .count
               margin-right: 12px
           .price
             font-weight: 700
