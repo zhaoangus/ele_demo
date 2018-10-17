@@ -38,16 +38,18 @@
         </li>
       </ul>
     </div>
+    <shopcar :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import BScroll from 'better-scroll'
+import Shopcar from '../shopcar/Shopcar'
 export default {
   name: 'Goods',
   props: {
-    seller: Object
+    seller: {}
   },
   data () {
     return {
@@ -56,6 +58,9 @@ export default {
       listHeight: [],
       scrollY: 0
     }
+  },
+  components: {
+    Shopcar
   },
   computed: {
     currentIndex () {
