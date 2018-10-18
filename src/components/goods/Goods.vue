@@ -32,13 +32,17 @@
                 <div class="price">
                   <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <!-- <cartcontrol :food="food" @cart-add="_drop"></cartcontrol> -->
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcar :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
+    <shopcar ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
   </div>
 </template>
 
@@ -46,6 +50,7 @@
 import axios from 'axios'
 import BScroll from 'better-scroll'
 import Shopcar from '../shopcar/Shopcar'
+import Cartcontrol from '../cartcontrol/Cartcontrol'
 export default {
   name: 'Goods',
   props: {
@@ -60,7 +65,8 @@ export default {
     }
   },
   components: {
-    Shopcar
+    Shopcar,
+    Cartcontrol
   },
   computed: {
     currentIndex () {
@@ -72,14 +78,29 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   methods: {
+    // _drop (target) {
+    //   this.$refs.shopcart.drop(target)
+    // },
     _initScroll () {
       this.menuScroll = new BScroll(this.$refs.menuwrapper, {
         click: true
       })
       this.foodsScroll = new BScroll(this.$refs.foodswrapper, {
+        click: true,
         probeType: 3
       })
       this.foodsScroll.on('scroll', (pos) => {
@@ -219,4 +240,8 @@ export default {
               text-decoration: line-through
               font-size: 10px
               color: rgb(147, 153, 159)
+          .cartcontrol-wrapper
+            position: absolute
+            right: 0
+            bottom: 12px
 </style>
