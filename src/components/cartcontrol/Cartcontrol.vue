@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     addCart () {
-      console.log('click')
+      // console.log('click')
       if (!this.food.count) {
         Vue.set(this.food, 'count', 1)
       } else {
