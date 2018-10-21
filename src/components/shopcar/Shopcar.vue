@@ -1,54 +1,60 @@
 <template>
-  <div class="shopcart">
-    <div class="content" @click="toggleList">
-      <div class="content-left">
-        <div class="logo-wrapper">
-          <div class="logo" :class="{highlight: totalCount>0}">
-            <span class="iconfont" :class="{highlight: totalCount>0}">&#xe6b8;</span>
+  <div>
+    <div class="shopcart">
+      <div class="content" @click="toggleList">
+        <div class="content-left">
+          <div class="logo-wrapper">
+            <div class="logo" :class="{highlight: totalCount>0}">
+              <span class="iconfont" :class="{highlight: totalCount>0}">&#xe6b8;</span>
+            </div>
+            <div class="num" v-show="totalCount>0">{{totalCount}}</div>
           </div>
-          <div class="num" v-show="totalCount>0">{{totalCount}}</div>
+          <div class="price" :class="{highlight: totalPrice>0}">¥{{totalPrice}}元</div>
+          <div class="desc">另需配送费¥{{deliveryPrice}}元</div>
         </div>
-        <div class="price" :class="{highlight: totalPrice>0}">¥{{totalPrice}}元</div>
-        <div class="desc">另需配送费¥{{deliveryPrice}}元</div>
-      </div>
-      <div class="content-right">
-        <div class="pay" :class="payClass">
-          {{payDesc}}
+        <div class="content-right" @click.stop.prevent="pay">
+          <div class="pay" :class="payClass">
+            {{payDesc}}
+          </div>
         </div>
-      </div>
-      <!-- <div class="ball-container">
-        <transition name="drop">
-          <div v-for="ball in balls" v-show="ball.show"
-          :key="ball.index" class="ball">
+        <!-- <div class="ball-container">
+          <transition name="drop">
+            <div v-for="ball in balls" v-show="ball.show"
+            :key="ball.index" class="ball">
+            </div>
+          </transition>
+        </div> -->
+        <transition name="fold">
+          <div class="shopcart-list" v-show="listShow">
+            <div class="list-header">
+              <div class="title">购物车</div>
+              <span class="empty" @click="empty">清空</span>
+            </div>
+            <div class="list-content" ref="list-content">
+              <ul>
+                <li class="food" v-for="food in selectFoods" :key="food.index">
+                  <span class="name">{{food.name}}</span>
+                  <div class="price">
+                    <span>¥{{food.price*food.count}}</span>
+                  </div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol :food="food"></cartcontrol>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </transition>
-      </div> -->
-      <transition name="fold">
-        <div class="shopcart-list" v-show="listShow">
-          <div class="list-header">
-            <div class="title">购物车</div>
-            <span class="empty">清空</span>
-          </div>
-          <div class="list-content">
-            <ul>
-              <li class="food" v-for="food in selectFoods" :key="food.index">
-                <span class="name">{{food.name}}</span>
-                <div class="price">
-                  <span>¥{{food.price*food.count}}</span>
-                </div>
-                <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </transition>
+      </div>
     </div>
+    <transition name="fade">
+      <div class="list-mask" @click="hideList" v-show="listShow"></div>
+    </transition>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import Cartcontrol from '../cartcontrol/Cartcontrol'
 export default {
   name: 'ShopCar',
@@ -130,6 +136,17 @@ export default {
           return false
         }
         let show = !this.fold
+        if (show) {
+          this.$nextTick(() => {
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.listContent, {
+                click: true
+              })
+            } else {
+              this.scroll.refresh()
+            }
+          })
+        }
         return show
       }
     }
@@ -140,6 +157,20 @@ export default {
         return
       }
       this.fold = !this.fold
+    },
+    empty () {
+      this.selectFoods.forEach((food) => {
+        food.count = 0
+      })
+    },
+    hideList () {
+      this.fold = true
+    },
+    pay () {
+      if (this.totalPrice < this.minPrice) {
+        return
+      }
+      window.alert(`支付${this.totalPrice}元`)
     }
   }
   // methods: {
@@ -265,7 +296,7 @@ export default {
         position: absolute
         left: 0
         top: 0
-        z-index: 1
+        z-index: -1
         width: 100%
         &.fold-enter-active, &.fold-leave-active
           transition: all 0.5s
@@ -313,4 +344,19 @@ export default {
               position: absolute
               right: 0
               bottom: 5px
+  .list-mask
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 40
+    backdrop-filter: blur(10px)
+    &.fade-enter-active
+      opacity: 1
+      transition: all .5s
+      background: rgba(7, 17, 27, .6)
+    &.fade-enter, &.fold-leave-to
+      opacity: 0
+      background: rgba(7, 17, 27, 0)
 </style>
