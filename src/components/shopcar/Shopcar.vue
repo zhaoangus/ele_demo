@@ -30,7 +30,7 @@
               <div class="title">购物车</div>
               <span class="empty" @click="empty">清空</span>
             </div>
-            <div class="list-content" ref="list-content">
+            <div class="list-content" ref="listcontent">
               <ul>
                 <li class="food" v-for="food in selectFoods" :key="food.index">
                   <span class="name">{{food.name}}</span>
@@ -126,29 +126,24 @@ export default {
         return 'enough'
       }
     },
-    listShow: {
-      get: function () {
-        return this.fold
-      },
-      set: function () {
-        if (!this.totalCount) {
-          this.fold = true
-          return false
-        }
-        let show = !this.fold
-        if (show) {
-          this.$nextTick(() => {
-            if (!this.scroll) {
-              this.scroll = new BScroll(this.$refs.listContent, {
-                click: true
-              })
-            } else {
-              this.scroll.refresh()
-            }
-          })
-        }
-        return show
+    listShow () {
+      if (!this.totalCount) {
+        this.fold = true
+        return false
       }
+      let show = !this.fold
+      if (show) {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.listcontent, {
+              click: true
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
+      }
+      return show
     }
   },
   methods: {
@@ -298,12 +293,10 @@ export default {
         top: 0
         z-index: -1
         width: 100%
-        &.fold-enter-active, &.fold-leave-active
-          transition: all 0.5s
+        transition: all 0.5s
+        transform: translate3d(0, -100%, 0)
         &.fold-enter, &.fold-leave-to
           transform: translate3d(0, 0, 0)
-        &.fold-enter-to, &.fold-leave
-          transform: translate3d(0, -100%, 0)
         .list-header
           height: 40px
           line-height: 40px
@@ -352,10 +345,9 @@ export default {
     height: 100%
     z-index: 40
     backdrop-filter: blur(10px)
-    &.fade-enter-active
-      opacity: 1
-      transition: all .5s
-      background: rgba(7, 17, 27, .6)
+    opacity: 1
+    transition: all .5s
+    background: rgba(7, 17, 27, .6)
     &.fade-enter, &.fold-leave-to
       opacity: 0
       background: rgba(7, 17, 27, 0)
