@@ -15,7 +15,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* .icon-cai:before { content: "\e607"; }
+.icon-cai:before { content: "\e607"; }
 
 .icon-zan:before { content: "\e62e"; }
 
@@ -29,5 +29,5 @@
 
 .icon-duigou:before { content: "\e627"; }
 
-.icon-shoucang:before { content: "\e628"; } */
+.icon-shoucang:before { content: "\e628"; }
 
