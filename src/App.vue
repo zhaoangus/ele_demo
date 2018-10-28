@@ -19,11 +19,18 @@
 <script>
 import axios from 'axios'
 import Header from './components/header/Header'
+import {urlParse} from './common/js/util'
 export default {
   name: 'App',
   data () {
     return {
-      seller: Object
+      seller: {
+        id: (() => {
+          let queryParm = urlParse()
+          console.log(queryParm)
+          return queryParm.id
+        })()
+      }
     }
   },
   components: {
